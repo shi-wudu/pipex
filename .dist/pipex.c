@@ -10,20 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <unistd.h>
-# include <stdio.h>
-# include <fcntl.h>
-# include <stdlib.h>
+# include "pipex.h"
 
-int	main()
+int	main(int argc, char *argv[], char *envp[])
 {
-	printf("Original process - PID: %d\n", getpid());
-	
-	int id1 = fork();
-	printf("After first fork - PID: %d, id1: %d\n", getpid(), id1);
-	
-	int id2 = fork();
-	printf("After second fork - PID: %d, id1: %d, id2: %d\n", getpid(), id1, id2);
-	
-	return 0;
+    char **cmd1;
+    char **cmd2;
+
+    // Parse commands using ft_split
+
+    //Opens infile and outfile 
+
+    //Forks two child processes 
+
+    //Uses pipe() and dup2() to redirect input/output 
+
+    //Resolves command path from $PATH 
+
+    //Executes both commands using execve() 
+		
 }
