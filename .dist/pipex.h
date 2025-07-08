@@ -6,7 +6,7 @@
 /*   By: marleand <marleand@student42.lisboa.pt>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:10:05 by marleand          #+#    #+#             */
-/*   Updated: 2025/07/08 15:58:14 by marleand         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:50:44 by marleand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@
 # include "../ft_printf/ft_printf.h"  
 # include "Libft/libft.h"             
 
+char    **parse(char *user_input);
+void free_args(char **args);
 
 #endif
