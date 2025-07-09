@@ -57,19 +57,55 @@ int	main(int argc, char *argv[], char *envp[])
     {
         dup2(infile_fd, STDIN_FILENO);
         dup2(pipefd[1], STDOUT_FILENO);
-        // executar && fechar
+        close(outfile_fd);
+        close(pipefd[0]);
+        if (execve(find_path(envp, cmd1), cmd1, envp) == -1)
+            exit(1);
     }
     id2 = fork();
     if (id2 == 0)
     {
         dup2(pipefd[0], STDIN_FILENO);
         dup2(outfile_fd, STDOUT_FILENO);
-        //executar && fechar
+        close(infile_fd);
+        close(pipefd[1]);
+        if (execve(find_path(envp, cmd2), cmd2, envp) == -1)
+            exit(1);
     }
-    wait(NULL)
+    close(infile_fd);
+    close(outfile_fd);
+    close(pipefd[0]);
+    close(pipefd[1]);
+    free_args(cmd1);
+    free_args(cmd2);
+    waitpid(id1, NULL, 0);
+    waitpid(id2, NULL, 0);
+}
+char     *find_path(char *envp[], char **cmd1)
+{
+    char    **temp;
+    char    **var;
+    char    *path;
+    char    *tpath;
 
-    //Resolves command path from $PATH 
-
-    //Executes both commands using execve() 
-		
+    temp = envp;
+    while (*temp != NULL && ft_strncmp(*temp, "PATH=", 5) != 0)
+        temp++;
+    if(*temp == NULL)
+        return (NULL);
+    *temp += 5;
+    if(*temp == NULL || (var = ft_split(*temp, ':')) == NULL) 
+        return (NULL);
+    while (*var)
+    {
+        tpath = ft_strjoin(*var, "/");
+        path = ft_strjoin(tpath, *cmd1);
+        free(tpath);
+        if (access(path, X_OK) == 0)
+            return (path);
+        free(path);
+        var++;
+    }
+    free_args(var);
+    return (NULL);
 }

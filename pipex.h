@@ -6,7 +6,7 @@
 /*   By: marleand <marleand@student42.lisboa.pt>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:10:05 by marleand          #+#    #+#             */
-/*   Updated: 2025/07/08 16:50:44 by marleand         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:51:39 by marleand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@
 
 char    **parse(char *user_input);
 void free_args(char **args);
+char    *find_path(char *envp[], char **cmd1);
 
 #endif

@@ -6,11 +6,11 @@
 /*   By: marleand <marleand@student42.lisboa.pt>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:54:52 by marleand          #+#    #+#             */
-/*   Updated: 2025/07/08 16:46:08 by marleand         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:43:16 by marleand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.c"
+#include "pipex.h"
 
 void free_args(char **args)
 {
