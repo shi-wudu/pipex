@@ -1,6 +1,6 @@
 NAME			=	pipex
 
-SRCS			=	pipex.c utils.c
+SRCS			=	pipex.c utils.c errors.c
 
 LIBFT_PATH		=	./Libft
 LIBFT			=	$(LIBFT_PATH)/libft.a
@@ -10,7 +10,7 @@ PRINTF			=	$(PRINTF_PATH)/libftprintf.a
 
 OBJS			=	$(SRCS:.c=.o)
 
-CC				=	cc
+CC				=	gcc
 
 CFLAGS			=	-Wall -Werror -Wextra -g -I. -I$(LIBFT_PATH) -I$(PRINTF_PATH)
 

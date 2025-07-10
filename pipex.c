@@ -21,65 +21,24 @@ int	main(int argc, char *argv[], char *envp[])
     int pipefd[2];
     pid_t id1;
     pid_t id2;
+    int pipe_status;
 
-    if (argc != 5)
-    {
-        ft_printf("This should be the syntax: $> ./pipex infile cm1 cm2 outfile");
-        exit(1);
-    }
-    cmd1 = parse(argv[2]);
-    cmd2 = parse(argv[3]);
-    if (cmd1 == NULL || cmd2 == NULL) {
-        printf("Parsing error!\n");
-        exit(1);
-    }
+    check_validity_of_argc(argc);
+    parse(argv[2], &cmd1, argv[3], &cmd2);
+    did_it_parse(cmd1, cmd2);
     infile_fd = open(argv[1], O_RDONLY);
     outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (infile_fd == -1)
-    {
-        perror("The infile failed to open.");
-        exit(1);
-    }
-    if (outfile_fd == -1)
-    {
-        perror("The outfile failed to open.");
-        exit(1);
-    }
-
-    if (pipe(pipefd) == -1)
-    {
-        perror("pipe");
-        exit(1);
-    }
-
+    pipe_status = pipe(pipefd);
+    did_it_pipe(cmd1, cmd2, pipe_status, pipefd);
+    why_the_fail(infile_fd, outfile_fd, cmd1, cmd2, pipefd);
     id1 = fork();
     if (id1 == 0)
-    {
-        dup2(infile_fd, STDIN_FILENO);
-        dup2(pipefd[1], STDOUT_FILENO);
-        close(outfile_fd);
-        close(pipefd[0]);
-        if (execve(find_path(envp, cmd1), cmd1, envp) == -1)
-            exit(1);
-    }
+        executioner(pipefd, infile_fd, cmd1, outfile_fd, envp, 1);
     id2 = fork();
     if (id2 == 0)
-    {
-        dup2(pipefd[0], STDIN_FILENO);
-        dup2(outfile_fd, STDOUT_FILENO);
-        close(infile_fd);
-        close(pipefd[1]);
-        if (execve(find_path(envp, cmd2), cmd2, envp) == -1)
-            exit(1);
-    }
-    close(infile_fd);
-    close(outfile_fd);
-    close(pipefd[0]);
-    close(pipefd[1]);
-    free_args(cmd1);
-    free_args(cmd2);
-    waitpid(id1, NULL, 0);
-    waitpid(id2, NULL, 0);
+        executioner(pipefd, infile_fd, cmd2, outfile_fd, envp, 2);
+    closer(infile_fd, outfile_fd, pipefd, cmd1, cmd2);
+    waiter(id1, id2);
 }
 char     *find_path(char *envp[], char **cmd1)
 {

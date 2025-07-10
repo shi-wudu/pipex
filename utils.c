@@ -25,7 +25,12 @@ void free_args(char **args)
     }
     free(args);
 }
-char    **parse(char *user_input)
+void    parse(char *strcmd1, char ***cmd1, char *strcmd2, char ***cmd2)
+{
+    *cmd1 = parsecmd(strcmd1);
+    *cmd2 = parsecmd(strcmd2);
+}
+char    **parsecmd(char *user_input)
 {   
     char **args;
     
@@ -47,4 +52,49 @@ char    **parse(char *user_input)
         return (NULL);
     }
     return (args);
+}
+
+int executioner(int *pipefd, int infile_fd, char **cmd, int outfile_fd, char **envp, int flag)
+{
+    if (flag == 1)
+    {
+        dup2(infile_fd, STDIN_FILENO);
+        dup2(pipefd[1], STDOUT_FILENO);
+        close(outfile_fd);
+        close(pipefd[0]);
+            if (execve(find_path(envp, cmd), cmd, envp) == -1)
+        exit(1);
+    }
+    if (flag == 2)
+    {
+        dup2(pipefd[0], STDIN_FILENO);
+        dup2(outfile_fd, STDOUT_FILENO);
+        close(infile_fd);
+        close(pipefd[1]);
+        if (execve(find_path(envp, cmd), cmd, envp) == -1)
+            exit(1);
+    }
+    return (0);
+}
+
+void    closer(int infile_fd, int outfile_fd, int pipefd[], char **cmd1, char **cmd2)
+{
+    close(infile_fd);
+    close(outfile_fd);
+    close(pipefd[0]);
+    close(pipefd[1]);
+    failproof(cmd1, cmd2, NULL, NULL);
+}
+
+void    did_it_parse(char **cmd1, char **cmd2)
+{
+    if (cmd1 == NULL || cmd2 == NULL) {
+        printf("Parsing error!\n");
+        exit(1);
+    }
+}
+void    waiter(pid_t id1, pid_t id2)
+{
+    waitpid(id1, NULL, 0);
+    waitpid(id2, NULL, 0);
 }
