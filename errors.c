@@ -38,8 +38,8 @@ void    why_the_fail(int infile, int outfile, char **cmd1, char **cmd2, int *pip
         if (outfile == -1)
             perror("The outfile failed to open.");
         failproof(cmd1, cmd2, pipefd, NULL);
+        exit(1);
     }
-    exit(1);
 }
 void    check_validity_of_argc(int argc)
 {
@@ -53,6 +53,9 @@ void    check_validity_of_argc(int argc)
 void    did_it_pipe(char **cmd1, char **cmd2, int pipe_status, int *pipefd)
 {
     if (pipe_status == -1)
+    {
         perror("pipe");
-    failproof(cmd1, cmd2, pipefd, NULL);
+        failproof(cmd1, cmd2, pipefd, NULL);
+        exit(1);
+    }
 }

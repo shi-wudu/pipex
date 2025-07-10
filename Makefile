@@ -10,7 +10,7 @@ PRINTF			=	$(PRINTF_PATH)/libftprintf.a
 
 OBJS			=	$(SRCS:.c=.o)
 
-CC				=	gcc
+CC				=	cc
 
 CFLAGS			=	-Wall -Werror -Wextra -g -I. -I$(LIBFT_PATH) -I$(PRINTF_PATH)
 

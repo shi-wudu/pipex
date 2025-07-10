@@ -65,6 +65,5 @@ char     *find_path(char *envp[], char **cmd1)
         free(path);
         var++;
     }
-    free_args(var);
     return (NULL);
 }
