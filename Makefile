@@ -83,7 +83,6 @@ $(NAME): 	$(LIBFT) $(PRINTF) $(OBJS)
 clean:
 					@rm -f $(OBJS)
 					@rm -f $(NAME)
-					@rm -f outfile infile
 					@$(MAKE) -C $(LIBFT_PATH) clean --silent
 					@$(MAKE) -C $(PRINTF_PATH) clean --silent
 					@echo "✓ All files cleaned"
@@ -96,28 +95,3 @@ fclean: 	clean
 re:			fclean all
 
 .PHONY: all clean fclean re
-
-define PRINT_PROGRESS
-    if [ "$(4)" -eq "1" ]; then \
-        printf "\033[0K$(3)\n["; \
-    else \
-        printf "\033[0K\033[1F\033[0K$(3)\n["; \
-    fi
-    @for i in `seq 1 $(shell expr $(4) \* 70 / $(1))`; do \
-        printf "$(2)=\033[0m"; \
-    done
-    @for i in `seq 1 $(shell expr 70 - $(4) \* 70 / $(1))`; do \
-        printf " "; \
-    done
-    @printf "] $(shell echo $$(($(4) * 100 / $(1))))%%"
-	if [ "$(4)" -eq "$(1)" ]; then \
-        printf "\n"; \
-	fi
-endef
-
-CYAN				=	\033[36m
-PURPLE				=	\033[35m
-YELLOW				=	\033[33m
-GRN					=	\033[32m
-RED					=	\033[31m
-DEFAULT				=	\033[0m
